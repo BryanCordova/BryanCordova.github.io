@@ -1,255 +1,228 @@
-console.clear();
+gsap.registerPlugin(ScrollTrigger);
+    let speed = 100;
 
-const { gsap, imagesLoaded } = window;
+    /*  SCENE 1 */
+    let scene1 = gsap.timeline();
+    ScrollTrigger.create({
+        animation: scene1,
+        trigger: ".scrollElement",
+        start: "top top",
+        end: "45% 100%",
+        scrub: 3,
+    });
 
-const buttons = {
-	prev: document.querySelector(".btn--left"),
-	next: document.querySelector(".btn--right"),
-};
-const cardsContainerEl = document.querySelector(".cards__wrapper");
-const appBgContainerEl = document.querySelector(".app__bg");
+    // hills animation 
+    scene1.to("#h1-1", { y: 3 * speed, x: 1 * speed, scale: 0.9, ease: "power1.in" }, 0)
+    scene1.to("#h1-2", { y: 2.6 * speed, x: -0.6 * speed, ease: "power1.in" }, 0)
+    scene1.to("#h1-3", { y: 1.7 * speed, x: 1.2 * speed }, 0.03)
+    scene1.to("#h1-4", { y: 3 * speed, x: 1 * speed }, 0.03)
+    scene1.to("#h1-5", { y: 2 * speed, x: 1 * speed }, 0.03)
+    scene1.to("#h1-6", { y: 2.3 * speed, x: -2.5 * speed }, 0)
+    scene1.to("#h1-7", { y: 5 * speed, x: 1.6 * speed }, 0)
+    scene1.to("#h1-8", { y: 3.5 * speed, x: 0.2 * speed }, 0)
+    scene1.to("#h1-9", { y: 3.5 * speed, x: -0.2 * speed }, 0)
 
-const cardInfosContainerEl = document.querySelector(".info__wrapper");
+    //animate text
+    scene1.to("#info", { y: 8 * speed }, 0)
 
-buttons.next.addEventListener("click", () => swapCards("right"));
 
-buttons.prev.addEventListener("click", () => swapCards("left"));
 
-function swapCards(direction) {
-	const currentCardEl = cardsContainerEl.querySelector(".current--card");
-	const previousCardEl = cardsContainerEl.querySelector(".previous--card");
-	const nextCardEl = cardsContainerEl.querySelector(".next--card");
+    /*   Bird   */
+    gsap.fromTo("#bird", { opacity: 1 }, {
+        y: -250,
+        x: 800,
+        ease: "power2.out",
+        scrollTrigger: {
+            trigger: ".scrollElement",
+            start: "15% top",
+            end: "60% 100%",
+            scrub: 4,
+            onEnter: function() { gsap.to("#bird", { scaleX: 1, rotation: 0 }) },
+            onLeave: function() { gsap.to("#bird", { scaleX: -1, rotation: -15 }) },
+        }
+    })
 
-	const currentBgImageEl = appBgContainerEl.querySelector(".current--image");
-	const previousBgImageEl = appBgContainerEl.querySelector(".previous--image");
-	const nextBgImageEl = appBgContainerEl.querySelector(".next--image");
 
-	changeInfo(direction);
-	swapCardsClass();
+    /* Clouds  */
+    let clouds = gsap.timeline();
+    ScrollTrigger.create({
+        animation: clouds,
+        trigger: ".scrollElement",
+        start: "top top",
+        end: "70% 100%",
+        scrub: 1,
+    });
 
-	removeCardEvents(currentCardEl);
+    clouds.to("#cloud1", { x: 500 }, 0)
+    clouds.to("#cloud2", { x: 1000 }, 0)
+    clouds.to("#cloud3", { x: -1000 }, 0)
+    clouds.to("#cloud4", { x: -700, y: 25 }, 0)
 
-	function swapCardsClass() {
-		currentCardEl.classList.remove("current--card");
-		previousCardEl.classList.remove("previous--card");
-		nextCardEl.classList.remove("next--card");
 
-		currentBgImageEl.classList.remove("current--image");
-		previousBgImageEl.classList.remove("previous--image");
-		nextBgImageEl.classList.remove("next--image");
 
-		currentCardEl.style.zIndex = "50";
-		currentBgImageEl.style.zIndex = "-2";
+    /* Sun motion Animation  */
+    let sun = gsap.timeline();
+    ScrollTrigger.create({
+        animation: sun,
+        trigger: ".scrollElement",
+        start: "top top",
+        end: "2200 100%",
+        scrub: 1,
+    });
 
-		if (direction === "right") {
-			previousCardEl.style.zIndex = "20";
-			nextCardEl.style.zIndex = "30";
+    //sun motion 
+    sun.to("#bg_grad", { attr: { cy: "330" } }, 0.00)
 
-			nextBgImageEl.style.zIndex = "-1";
+    //bg change
+    sun.to("#sun", { attr: { offset: "0.15" } }, 0.00)
+    sun.to("#bg_grad stop:nth-child(2)", { attr: { offset: "0.15" } }, 0.00)
+    sun.to("#bg_grad stop:nth-child(3)", { attr: { offset: "0.18" } }, 0.00)
+    sun.to("#bg_grad stop:nth-child(4)", { attr: { offset: "0.25" } }, 0.00)
+    sun.to("#bg_grad stop:nth-child(5)", { attr: { offset: "0.46" } }, 0.00)
+    sun.to("#bg_grad stop:nth-child(6)", { attr: { "stop-color": "#FF9171" } }, 0)
 
-			currentCardEl.classList.add("previous--card");
-			previousCardEl.classList.add("next--card");
-			nextCardEl.classList.add("current--card");
 
-			currentBgImageEl.classList.add("previous--image");
-			previousBgImageEl.classList.add("next--image");
-			nextBgImageEl.classList.add("current--image");
-		} else if (direction === "left") {
-			previousCardEl.style.zIndex = "30";
-			nextCardEl.style.zIndex = "20";
 
-			previousBgImageEl.style.zIndex = "-1";
+    /*   SCENE 2  */
+    let scene2 = gsap.timeline();
+    ScrollTrigger.create({
+        animation: scene2,
+        trigger: ".scrollElement",
+        start: "15% top",
+        end: "40% 100%",
+        scrub: 4,
+    });
 
-			currentCardEl.classList.add("next--card");
-			previousCardEl.classList.add("current--card");
-			nextCardEl.classList.add("previous--card");
+    scene2.fromTo("#h2-1", { y: 500, opacity: 0 }, { y: 0, opacity: 1 }, 0)
+    scene2.fromTo("#h2-2", { y: 500 }, { y: 0 }, 0.1)
+    scene2.fromTo("#h2-3", { y: 700 }, { y: 0 }, 0.1)
+    scene2.fromTo("#h2-4", { y: 700 }, { y: 0 }, 0.2)
+    scene2.fromTo("#h2-5", { y: 800 }, { y: 0 }, 0.3)
+    scene2.fromTo("#h2-6", { y: 900 }, { y: 0 }, 0.3)
 
-			currentBgImageEl.classList.add("next--image");
-			previousBgImageEl.classList.add("current--image");
-			nextBgImageEl.classList.add("previous--image");
-		}
-	}
-}
 
-function changeInfo(direction) {
-	let currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
-	let previousInfoEl = cardInfosContainerEl.querySelector(".previous--info");
-	let nextInfoEl = cardInfosContainerEl.querySelector(".next--info");
 
-	gsap.timeline()
-		.to([buttons.prev, buttons.next], {
-		duration: 0.2,
-		opacity: 0.5,
-		pointerEvents: "none",
-	})
-		.to(
-		currentInfoEl.querySelectorAll(".text"),
-		{
-			duration: 0.4,
-			stagger: 0.1,
-			translateY: "-120px",
-			opacity: 0,
-		},
-		"-="
-	)
-		.call(() => {
-		swapInfosClass(direction);
-	})
-		.call(() => initCardEvents())
-		.fromTo(
-		direction === "right"
-		? nextInfoEl.querySelectorAll(".text")
-		: previousInfoEl.querySelectorAll(".text"),
-		{
-			opacity: 0,
-			translateY: "40px",
-		},
-		{
-			duration: 0.4,
-			stagger: 0.1,
-			translateY: "0px",
-			opacity: 1,
-		}
-	)
-		.to([buttons.prev, buttons.next], {
-		duration: 0.2,
-		opacity: 1,
-		pointerEvents: "all",
-	});
+    /* Bats */
+    gsap.fromTo("#bats", { opacity: 1, y: 400, scale: 0 }, {
+        y: 120,
+        scale: 0.8,
+        transformOrigin: "50% 50%",
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: ".scrollElement",
+            start: "40% top",
+            end: "70% 100%",
+            scrub: 3,
+            onEnter: function() {
+                gsap.utils.toArray("#bats path").forEach((item, i) => {
+                    gsap.to(item, { scaleX: 0.5, yoyo: true, repeat: 11, duration: 0.15, delay: 0.7 + (i / 10), transformOrigin: "50% 50%" })
+                });
+                gsap.set("#bats", { opacity: 1 })
+            },
+            onLeave: function() { gsap.to("#bats", { opacity: 0, delay: 2 }) },
+        }
+    })
 
-	function swapInfosClass() {
-		currentInfoEl.classList.remove("current--info");
-		previousInfoEl.classList.remove("previous--info");
-		nextInfoEl.classList.remove("next--info");
 
-		if (direction === "right") {
-			currentInfoEl.classList.add("previous--info");
-			nextInfoEl.classList.add("current--info");
-			previousInfoEl.classList.add("next--info");
-		} else if (direction === "left") {
-			currentInfoEl.classList.add("next--info");
-			nextInfoEl.classList.add("previous--info");
-			previousInfoEl.classList.add("current--info");
-		}
-	}
-}
+    /* Sun increase */
+    let sun2 = gsap.timeline();
+    ScrollTrigger.create({
+        animation: sun2,
+        trigger: ".scrollElement",
+        start: "2200 top",
+        end: "5000 100%",
+        scrub: 1,
+    });
 
-function updateCard(e) {
-	const card = e.currentTarget;
-	const box = card.getBoundingClientRect();
-	const centerPosition = {
-		x: box.left + box.width / 2,
-		y: box.top + box.height / 2,
-	};
-	let angle = Math.atan2(e.pageX - centerPosition.x, 0) * (35 / Math.PI);
-	gsap.set(card, {
-		"--current-card-rotation-offset": `${angle}deg`,
-	});
-	const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
-	gsap.set(currentInfoEl, {
-		rotateY: `${angle}deg`,
-	});
-}
+    sun2.to("#sun", { attr: { offset: "0.6" } }, 0)
+    sun2.to("#bg_grad stop:nth-child(2)", { attr: { offset: "0.7" } }, 0)
+    sun2.to("#sun", { attr: { "stop-color": "#ffff00" } }, 0)
+    sun2.to("#lg4 stop:nth-child(1)", { attr: { "stop-color": "#623951" } }, 0)
+    sun2.to("#lg4 stop:nth-child(2)", { attr: { "stop-color": "#261F36" } }, 0)
+    sun2.to("#bg_grad stop:nth-child(6)", { attr: { "stop-color": "#45224A" } }, 0)
 
-function resetCardTransforms(e) {
-	const card = e.currentTarget;
-	const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
-	gsap.set(card, {
-		"--current-card-rotation-offset": 0,
-	});
-	gsap.set(currentInfoEl, {
-		rotateY: 0,
-	});
-}
 
-function initCardEvents() {
-	const currentCardEl = cardsContainerEl.querySelector(".current--card");
-	currentCardEl.addEventListener("pointermove", updateCard);
-	currentCardEl.addEventListener("pointerout", (e) => {
-		resetCardTransforms(e);
-	});
-}
 
-initCardEvents();
+    /* Transition (from Scene2 to Scene3) */
+    gsap.set("#scene3", { y: 580, visibility: "visible" })
+    let sceneTransition = gsap.timeline();
+    ScrollTrigger.create({
+        animation: sceneTransition,
+        trigger: ".scrollElement",
+        start: "70% top",
+        end: "bottom 100%",
+        scrub: 3,
+    });
 
-function removeCardEvents(card) {
-	card.removeEventListener("pointermove", updateCard);
-}
+    sceneTransition.to("#h2-1", { y: -680, scale: 1.5, transformOrigin: "50% 50%" }, 0)
+    sceneTransition.to("#bg_grad", { attr: { cy: "-80" } }, 0.00)
+    sceneTransition.to("#bg2", { y: 0 }, 0)
 
-function init() {
 
-	let tl = gsap.timeline();
 
-	tl.to(cardsContainerEl.children, {
-		delay: 0.15,
-		duration: 0.5,
-		stagger: {
-			ease: "power4.inOut",
-			from: "right",
-			amount: 0.1,
-		},
-		"--card-translateY-offset": "0%",
-	})
-		.to(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
-		delay: 0.5,
-		duration: 0.4,
-		stagger: 0.1,
-		opacity: 1,
-		translateY: 0,
-	})
-		.to(
-		[buttons.prev, buttons.next],
-		{
-			duration: 0.4,
-			opacity: 1,
-			pointerEvents: "all",
-		},
-		"-=0.4"
-	);
-}
+    /* Scene 3 */
+    let scene3 = gsap.timeline();
+    ScrollTrigger.create({
+        animation: scene3,
+        trigger: ".scrollElement",
+        start: "80% 50%",
+        end: "bottom 100%",
+        scrub: 3,
+    });
 
-const waitForImages = () => {
-	const images = [...document.querySelectorAll("img")];
-	const totalImages = images.length;
-	let loadedImages = 0;
-	const loaderEl = document.querySelector(".loader span");
+    //Hills motion
+    scene3.fromTo("#h3-1", { y: 300 }, { y: -550 }, 0)
+    scene3.fromTo("#h3-2", { y: 800 }, { y: -550 }, 0.03)
+    scene3.fromTo("#h3-3", { y: 600 }, { y: -550 }, 0.06)
+    scene3.fromTo("#h3-4", { y: 800 }, { y: -550 }, 0.09)
+    scene3.fromTo("#h3-5", { y: 1000 }, { y: -550 }, 0.12)
 
-	gsap.set(cardsContainerEl.children, {
-		"--card-translateY-offset": "100vh",
-	});
-	gsap.set(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
-		translateY: "40px",
-		opacity: 0,
-	});
-	gsap.set([buttons.prev, buttons.next], {
-		pointerEvents: "none",
-		opacity: "0",
-	});
+    //stars
+    scene3.fromTo("#stars", { opacity: 0 }, { opacity: 0.5, y: -500 }, 0)
 
-	images.forEach((image) => {
-		imagesLoaded(image, (instance) => {
-			if (instance.isComplete) {
-				loadedImages++;
-				let loadProgress = loadedImages / totalImages;
+    // Scroll Back text
+    scene3.fromTo("#arrow2", { opacity: 0 }, { opacity: 0.7, y: -710 }, 0.25)
+    scene3.fromTo("#text2", { opacity: 0 }, { opacity: 0.7, y: -710 }, 0.3)
 
-				gsap.to(loaderEl, {
-					duration: 1,
-					scaleX: loadProgress,
-					backgroundColor: `hsl(${loadProgress * 120}, 100%, 50%`,
-				});
+    //gradient value change
+    scene3.to("#bg2-grad", { attr: { cy: 600 } }, 0)
+    scene3.to("#bg2-grad", { attr: { r: 500 } }, 0)
 
-				if (totalImages == loadedImages) {
-					gsap.timeline()
-						.to(".loading__wrapper", {
-						duration: 0.8,
-						opacity: 0,
-						pointerEvents: "none",
-					})
-						.call(() => init());
-				}
-			}
-		});
-	});
-};
 
-waitForImages();
+    /*   falling star   */
+    gsap.to("#fstar", {
+        x: -700,
+        y: -250,
+        ease: "power4.out",
+        scrollTrigger: {
+            trigger: ".scrollElement",
+            start: "4000 top",
+            end: "6000 100%",
+            scrub: 5,
+            onEnter: function() { gsap.set("#fstar", { opacity: 1 }) },
+            onLeave: function() { gsap.set("#fstar", { opacity: 0 }) },
+        }
+    })
+
+
+    //reset scrollbar position after refresh
+    window.onbeforeunload = function() {
+        window.scrollTo(0, 0);
+    }
+
+
+let fullscreen;
+let fsEnter = document.getElementById('fullscr');
+fsEnter.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (!fullscreen) {
+        fullscreen = true;
+        document.documentElement.requestFullscreen();
+        fsEnter.innerHTML = "Exit Fullscreen";
+    }
+    else {
+        fullscreen = false;
+        document.exitFullscreen();
+        fsEnter.innerHTML = "Go Fullscreen";
+    }
+});
