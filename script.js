@@ -218,11 +218,11 @@ fsEnter.addEventListener('click', function (e) {
     if (!fullscreen) {
         fullscreen = true;
         document.documentElement.requestFullscreen();
-        fsEnter.innerHTML = "Exit Fullscreen";
+        fsEnter.innerHTML = "Salir de Pantalla completa";
     }
     else {
         fullscreen = false;
         document.exitFullscreen();
-        fsEnter.innerHTML = "Go Fullscreen";
+        fsEnter.innerHTML = "Pantalla completa";
     }
 });
